@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraping et Analyse ML</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Entrez les informations pour le scraping et l'analyse</h2>
+    <form action="/submit_data" method="post">
+        <div class="form-group">
+            <label for="username">Nom du vendeur :</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="styles">Styles musicaux (séparés par des virgules) :</label>
+            <input type="text" class="form-control" id="styles" name="styles" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="token">Votre Token :</label>
+            <input type="text" class="form-control" id="token" name="token" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Votre e-mail :</label>
+            <input type="text" class="form-control" id="email" name="user_email" required>
+
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
