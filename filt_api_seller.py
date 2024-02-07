@@ -17,38 +17,29 @@ import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 from pprint import pprint
 
-# Configuration de la clé API
-configuration = sib_api_v3_sdk.Configuration()
-configuration.api_key['api-key'] = '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'
-
-# Création d'une instance de l'API avec la configuration
-api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
-
 def send_email(user_email, output_file_path):
-
+    api_key = 'eeede3b34a486a06e0893fa52174fd79-8c90f339-a9eeb9ae'
+    domain_name = 'sandboxf06520013a904916b551a9ce0148d695.mailgun.org'
     
-    # Définition de l'expéditeur et du destinataire
-    sender = {"email":"art.fact.06@gmail.com", "name":"Art&Facts"}
-    recipients = [{"email":user_email}]
+    # Open the file in a context manager 
+    with open(output_file_path, "rb") as attachment:
+        response = requests.post(
+            f"https://api.mailgun.net/v3/{domain_name}/messages",
+            auth=("api", api_key),
+            files=[("attachment", (output_file_path, attachment.read()))], # Add the file as an attachment
+            data={
+                "from": f"Art&Facts <mailgun@{domain_name}>",
+                "to": [user_email],
+                "subject": "Hello",
+                "text": "Hi, your file is ready, start digging!"
+            }
+        )
     
-    # Sujet de l'email
-    subject = "Your file is ready, start digging!"
+    # Print the status code and the result of the request
+    print(f"Status Code: {response.status_code}")
+    print(f"Response Body: {response.text}")
     
-    # Corps de l'email en HTML
-    html_content = "<html><body><h1>Voici votre fichier de données traitées.</h1><p>Vous trouverez ci-joint le fichier avec les données traitées.</p></body></html>"
-    
-    # Pièce jointe - Assurez-vous que le chemin est correct
-    attachment = [{"url": f"file://{output_file_path}", "name": "ProcessedData.xlsx"}]
-    
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=recipients, html_content=html_content, sender=sender, subject=subject, attachment=attachment)
-    
-    try:
-        # Envoi de l'email
-        api_response = api_instance.send_transac_email(send_smtp_email)
-        pprint(api_response)
-    except ApiException as e:
-        print("Exception lors de l'envoi de l'email via Sendinblue: %s\n" % e)
-
+    return response
 
 def clean_email(user_email):
     return user_email.replace('.', '_')
