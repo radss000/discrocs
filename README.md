@@ -8,19 +8,19 @@ Discrocs est une application web développée en Python avec le framework Flask.
 - Scraper des données d'inventaire de Discogs chez un vendeur en utilisant un token d'authentification.
 - Filtrer les résultats en fonction des styles de musique spécifiés par l'utilisateur.
 - Analyser les données collectées pour calculer un "score final" pour chaque vinyle.
-- Permettre le téléchargement des résultats sous forme de fichier Excel.
+- Permettre le téléchargement des résultats suite à la réception d'un mail automatique reçu à la fin du process.
 
 ## Comment ça marche
 
 1. L'utilisateur entre le nom d'utilisateur du vendeur chez lequel il souhaite analyser certaines releases sur Discogs, son token d'API, et les styles de musique qu'il souhaite filtrer.
 2. L'application interroge l'API de Discogs et récupère les données correspondantes.
 3. Ces données sont ensuite analysées pour calculer un score final basé sur le rating, le nombre de personnes voulant l'article (wantlist), le nombre de personnes possédant l'article (collection), le prix le plus bas et l'année de sortie avec une régression.
-4. Les résultats sont sauvegardés dans un fichier Excel, que l'utilisateur peut télécharger directement depuis l'interface web.
+4. Les résultats sont sauvegardés dans un fichier Excel, que l'utilisateur peut télécharger directement en checkant sa boîte mail.
 
 
 ## Machine Learning dans Discrocs
 
-L'application Discrocs utilise un modèle de régression pour analyser et prédire la popularité potentielle d'un vinyle basée sur des données historiques. Voici un aperçu du processus :
+L'application Discrocs utilise un modèle de régression pour analyser et prédire la popularité et la rareté potentielle d'un vinyle basée sur des données historiques. Voici un aperçu du processus :
 
 ### Algorithme
 
