@@ -3,36 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scraping et Analyse ML</title>
+    <title>ML Scraping and Analysis</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #111;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+        }
+        .container {
+            margin-top: 50px;
+            width: 80%;
+        }
+        h2, label {
+            color: #0f0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: #333;
+            border-color: #0f0;
+        }
+        .btn-primary:hover {
+            background-color: #0f0;
+            color: #111;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">Entrez les informations pour le scraping et l'analyse</h2>
+<div class="container">
+    <h1 class="mb-4 text-center">Art&Facts</h1>
+    <h2 class="mb-4">Enter these informations to start digging</h2>
     <form action="/submit_data" method="post">
         <div class="form-group">
-            <label for="username">Nom du vendeur :</label>
+            <label for="username">Seller's Name:</label>
             <input type="text" class="form-control" id="username" name="username" required>
         </div>
         
         <div class="form-group">
-            <label for="styles">Styles musicaux (séparés par des virgules) :</label>
+            <label for="styles">Musical Styles (comma separated, Ex: Techno, Abstract, Minimal Techno):</label>
             <input type="text" class="form-control" id="styles" name="styles" required>
         </div>
         
         <div class="form-group">
-            <label for="token">Votre Token :</label>
+            <label for="token">Your Token:</label>
             <input type="text" class="form-control" id="token" name="token" required>
         </div>
 
         <div class="form-group">
-            <label for="email">Votre e-mail :</label>
-            <input type="text" class="form-control" id="email" name="user_email" required>
-
+            <label for="email">Your Email:</label>
+            <input type="email" class="form-control" id="email" name="user_email" required>
         </div>
         
-        <button type="submit" class="btn btn-primary">Soumettre</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <script>
+            document.querySelector('form').addEventListener('submit', function(e) {
+                e.preventDefault(); 
+    
+                this.style.display = 'none';
+                
+              
+                const loadingMessage = document.createElement('p');
+                loadingMessage.textContent = 'Your request is being processed. You will receive an email with a nice gift in a few minutes. (Check your spams)';
+                document.querySelector('.container').appendChild(loadingMessage);
+    
+      
+            });
+        </script>
     </form>
+    <p class="footer">
+        This project is in the testing phase. Any feedback is welcome at <a href="mailto:radialhsn@gmail.com">radialhsn@gmail.com</a>.
+    </p>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
