@@ -1,0 +1,13 @@
+numpy
+librosa
+pydub
+spafe
+matplotlib
+seaborn
+Flask
+requests
+pandas
+firebase-admin
+sib-api-v3-sdk
+scikit-learn
+gunicorn
