@@ -3,6 +3,7 @@ from datetime import datetime
 import csv
 import time
 import api_front
+import os
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -45,12 +46,23 @@ def clean_email(user_email):
     return user_email.replace('.', '_')
 
 
-# Initialize Firebase
-cred = credentials.Certificate('C:/Users/radia/Downloads/discogs-d266e-firebase-adminsdk-c62xu-80f2507093.json')  # Update path
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://discogs-d266e-default-rtdb.europe-west1.firebasedatabase.app/'  # Update URL
-})
+firebase_credentials = {
+    "type": "service_account",
+    "project_id": os.environ.get("FIREBASE_PROJECT_ID"),
+    "private_key_id": "discogs-d266e",
+    "private_key": os.environ.get("FIREBASE_PRIVATE_KEY").replace('\\n', '\n'),
+    "client_email": os.environ.get("FIREBASE_CLIENT_EMAIL"),
+    "client_id": "110984853127742760045",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "your_client_x509_cert_url"
+}
 
+cred = credentials.Certificate(firebase_credentials)
+firebase_admin.initialize_app(cred, {
+    'databaseURL': os.environ.get("FIREBASE_DATABASE_URL")
+})
 
 # Correction de la signature de la fonction pour accepter une liste de vinyl_records
 def save_to_firebase(user_email, username, vinyl_records):
