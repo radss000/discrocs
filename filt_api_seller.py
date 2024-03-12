@@ -14,13 +14,11 @@ from email.mime.base import MIMEBase
 from email import encoders
 import json
 
-import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
 from pprint import pprint
 
 def send_email(user_email, output_file_path):
-    api_key = 'eeede3b34a486a06e0893fa52174fd79-8c90f339-a9eeb9ae'
-    domain_name = 'sandboxf06520013a904916b551a9ce0148d695.mailgun.org'
+    api_key = '1e011b62826101482c83a897f793e4d4-b02bcf9f-876e81d4'
+    domain_name = 'sandbox6dc090ec95f043f2b341cd75ca6a9013.mailgun.org'
     
     # Open the file in a context manager 
     with open(output_file_path, "rb") as attachment:
@@ -31,8 +29,8 @@ def send_email(user_email, output_file_path):
             data={
                 "from": f"Art&Facts <mailgun@{domain_name}>",
                 "to": [user_email],
-                "subject": "Hello",
-                "text": "Hi, your file is ready, start digging!"
+                "subject": "Start digging!",
+                "text": "Hey, your file is ready, start digging!"
             }
         )
     

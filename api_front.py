@@ -1,30 +1,46 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 import threading
 import filt_api_seller as scraper
-import ml_discogs_stats as ml 
+import ml_discogs_stats as ml
 import json
+import os
 from firebase_admin import db
 import pandas as pd
 
 app = Flask(__name__)
 
+process_complete = False
+process_complete_path = None
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/discrocs/<path:filename>')
+def download_file(filename):
+    # Use the global variable to construct the file path
+    file_path = os.path.join(os.getcwd(), 'discrocs', process_complete_path)
+
+    # Serve the file
+    return send_from_directory(directory=os.path.dirname(file_path), filename=os.path.basename(file_path), as_attachment=True)
+
+@app.route('/check_process_status')
+def check_process_status():
+    return jsonify({'process_complete': process_complete})
 
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
     username = request.form['username']
     token = request.form['token']
     styles = request.form['styles'].split(',')
-    user_email = request.form['user_email']  
+    user_email = request.form['user_email']
 
     # Lancer le processus dans un thread pour ne pas bloquer l'application
     thread = threading.Thread(target=run_process, args=(user_email, username, token, styles))
     thread.start()
 
     return jsonify({"message": "Processus démarré. Veuillez patienter pour les résultats."})
+
 def clean_email(user_email):
     return user_email.replace('.', '_')
 
@@ -45,14 +61,22 @@ def run_process(user_email, username, token, styles):
     unique_path = f"{username}_{token[:5]}"
     json_file_path = f"{unique_path}_data.json"
     output_file_path = f"{unique_path}_analysis.xlsx"
-    
+
     # Sauvegarde des données scrapées en JSON
     scraper.save_to_firebase(user_email, username, [vinyl_record])
     json_file_path = export_user_data_to_json(user_email, username)
     # Application de l'analyse ML et sauvegarde des résultats dans un fichier Excel
     ml.automate_ml_process(json_file_path, output_file_path)
     send_email(user_email, output_file_path)
-    # Ici, vous pourriez ajouter la logique pour notifier l'utilisateur que le processus est terminé,
-    # par exemple via un user_email ou en rendant le fichier Excel téléchargeable depuis une URL.
+
+    # Mettre à jour la variable globale avec le chemin d'accès au fichier généré
+    global process_complete_path
+    process_complete_path = output_file_path
+
+    # Marquer le processus comme terminé
+    global process_complete
+    process_complete = True
+    return output_file_path
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
