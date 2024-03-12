@@ -39,7 +39,18 @@ def submit_data():
     thread = threading.Thread(target=run_process, args=(user_email, username, token, styles))
     thread.start()
 
-    return jsonify({"message": "Processus démarré. Veuillez patienter pour les résultats."})
+    # Attendre que le processus soit terminé
+    thread.join()
+
+    # Récupérer le nom de fichier généré
+    output_file_path = thread.get_result()
+
+    # Stocker le nom de fichier généré dans une variable globale
+    global process_complete_path
+    process_complete_path = output_file_path
+
+    # Retourner le nom de fichier généré dans la réponse JSON
+    return jsonify({"message": "Processus terminé. Les résultats sont prêts à être téléchargés.", "filename": output_file_path})
 
 def clean_email(user_email):
     return user_email.replace('.', '_')
@@ -60,7 +71,7 @@ def run_process(user_email, username, token, styles):
     vinyl_record = scraper.fetch_and_filter_inventory(user_email, username, token, styles)
     unique_path = f"{username}_{token[:5]}"
     json_file_path = f"{unique_path}_data.json"
-    output_file_path = f"{unique_path}_analysis.xlsx"
+    output_file_path = f"{unique_path}_analysis.csv"
 
     # Sauvegarde des données scrapées en JSON
     scraper.save_to_firebase(user_email, username, [vinyl_record])
