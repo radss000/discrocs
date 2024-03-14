@@ -16,6 +16,8 @@ import json
 
 from pprint import pprint
 
+
+
 def send_email(user_email, output_file_path):
     api_key = '1e011b62826101482c83a897f793e4d4-b02bcf9f-876e81d4'
     domain_name = 'sandbox6dc090ec95f043f2b341cd75ca6a9013.mailgun.org'
@@ -54,7 +56,7 @@ firebase_credentials = {
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "your_client_x509_cert_url"
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-c62xu%40discogs-d266e.iam.gserviceaccount.com"
 }
 
 cred = credentials.Certificate(firebase_credentials)

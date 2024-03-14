@@ -39,8 +39,6 @@ def submit_data():
     thread = threading.Thread(target=run_process, args=(user_email, username, token, styles))
     thread.start()
 
-    # Attendre que le processus soit terminé
-    thread.join()
 
     # Récupérer le nom de fichier généré
     output_file_path = thread.get_result()
