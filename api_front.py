@@ -82,7 +82,7 @@ def run_process(user_email, username, token, styles):
     scraper.save_to_firebase(user_email, username, [vinyl_record])
     json_file_path = export_user_data_to_json(user_email, username)
     # Application de l'analyse ML et sauvegarde des résultats dans un fichier Excel
-    # ml.automate_ml_process(json_file_path, output_file_path)
+    ml.automate_ml_process(json_file_path, output_file_path)
     send_email(user_email, output_file_path)
 
     # Mettre à jour la variable globale avec le chemin d'accès au fichier généré
