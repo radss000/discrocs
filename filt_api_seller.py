@@ -13,10 +13,14 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import json
-
+from dotenv import load_dotenv
 from pprint import pprint
 
+<<<<<<< HEAD
 
+=======
+load_dotenv()
+>>>>>>> caeb02bf5a06f639fc2d557e07498cf08385d2fe
 
 def send_email(user_email, output_file_path):
     api_key = '1e011b62826101482c83a897f793e4d4-b02bcf9f-876e81d4'
