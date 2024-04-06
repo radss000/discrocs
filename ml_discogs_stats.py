@@ -29,7 +29,8 @@ def automate_ml_process(file_path, output_file_path):
         df_records['wantlist'] = df_records['wantlist'].fillna(0)
     # Ajout et calcul de nouvelles caractéristiques si nécessaire
     df_records['wantlist_to_collection_ratio'] = df_records['wantlist'] / df_records['collection'].replace(0, 1) # Éviter la division par zéro
-    df_records['wantlist_to_collection_ratio'].replace([float('inf'), -float('inf')], 9999, inplace=True)
+    df_records['wantlist_to_collection_ratio'] = df_records['wantlist_to_collection_ratio'].replace([float('inf'), -float('inf')], 9999)
+
 
     # Sélection des caractéristiques pour la régression
     X = df_records[['collection', 'lowest_price', 'rating', 'release_year', 'wantlist_to_collection_ratio']]
