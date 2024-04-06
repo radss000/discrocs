@@ -13,14 +13,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import json
-from dotenv import load_dotenv
 from pprint import pprint
 
-<<<<<<< HEAD
-
-=======
-load_dotenv()
->>>>>>> caeb02bf5a06f639fc2d557e07498cf08385d2fe
 
 def send_email(user_email, output_file_path):
     api_key = '1e011b62826101482c83a897f793e4d4-b02bcf9f-876e81d4'
@@ -47,7 +41,8 @@ def send_email(user_email, output_file_path):
     return response
 
 def clean_email(user_email):
-    return user_email.replace('.', '_')
+    return ''.join('_' if c in '.@$[]#' else c for c in user_email)
+
 
 
 firebase_credentials = {
@@ -98,6 +93,7 @@ def fetch_and_filter_inventory(user_email, username, token, styles):
         for item in inventory:
             release_id = item['release']['id']
             print(f"Processing release ID: {release_id}")
+            print(f"Styles for this release: {styles}")
             vinyl_record = process_release(release_id, token, styles)
 
             if vinyl_record:
@@ -129,9 +125,9 @@ def export_user_data_to_json(user_email, username):
     return json_file_path
 def process_release(release_id, token, styles):
     release_info = get_release_info(release_id, token)
-
     if release_info:
-        print("API Response Styles:", release_info.get('styles', []))
+        print(f"API Response Styles: {release_info.get('styles', [])}")
+        print(f"Given Styles: {styles}")
         if any(style in release_info.get('styles', []) for style in styles):
             final_grade = calculate_final_grade(
                 release_info.get('community', {}).get('rating', {}).get('average', 0),

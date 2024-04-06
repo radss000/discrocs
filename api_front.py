@@ -7,6 +7,8 @@ import os
 from firebase_admin import db
 import pandas as pd
 
+from concurrent.futures import ThreadPoolExecutor
+
 app = Flask(__name__)
 
 process_complete = False
@@ -28,27 +30,33 @@ def download_file(filename):
 def check_process_status():
     return jsonify({'process_complete': process_complete})
 
+
+# Votre fonction run_process doit retourner output_file_path
+
 @app.route('/submit_data', methods=['POST'])
 def submit_data():
     username = request.form['username']
     token = request.form['token']
     styles = request.form['styles'].split(',')
+    print(f"Styles from form data: {styles}")
     user_email = request.form['user_email']
 
     # Lancer le processus dans un thread pour ne pas bloquer l'application
-    thread = threading.Thread(target=run_process, args=(user_email, username, token, styles))
-    thread.start()
-
-
-    # Récupérer le nom de fichier généré
-    output_file_path = thread.get_result()
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(run_process, user_email, username, token, styles)
+        output_file_path = future.result()  # Attend que le thread soit terminé et récupère le résultat
 
     # Stocker le nom de fichier généré dans une variable globale
     global process_complete_path
     process_complete_path = output_file_path
 
+    # Marquer le processus comme terminé
+    global process_complete
+    process_complete = True
+
     # Retourner le nom de fichier généré dans la réponse JSON
     return jsonify({"message": "Processus terminé. Les résultats sont prêts à être téléchargés.", "filename": output_file_path})
+
 
 def clean_email(user_email):
     return user_email.replace('.', '_')
